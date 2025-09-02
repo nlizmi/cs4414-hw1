@@ -15,7 +15,7 @@ The assignment is broken down into three main parts with three different deadlin
 
 | Task                                         | Points | Due Date             |
 |----------------------------------------------|--------|----------------------|
-| 1. Work with 1D Data                         | 60     | September 15, 2025   |
+| 1. Work with 1D Data                         | 40     | September 15, 2025   |
 | 2. Work with k-d Data                        | 20     | September 22, 2025   |
 | 3. ANN Search Using the ALGLIB Library       | 30     | September 29, 2025   |
 
