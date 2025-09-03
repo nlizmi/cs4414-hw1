@@ -163,7 +163,7 @@ A k-d tree organizes $k$-dimensional points using recursive partitioning. At eac
 
 ## Build k-d Tree
 
-A **k-d tree** (short for *k*-dimensional tree) is a generalization of a binary search tree that organizes points in $d$-dimensional space. Like the 1D case, the idea is to recursively partition the space, but instead of splitting the number line, each node splits the space with a **hyperplane** (e.g., a vertical or horizontal line in 2D). This recursively divides the space into regions, like slicing a cake repeatedly along different planes.
+A **k-d tree** (short for *k*-dimensional tree) is a generalization of a binary search tree that organizes points in $k$-dimensional space. Like the 1D case, the idea is to recursively partition the space, but instead of splitting the number line, each node splits the space with a **hyperplane** (e.g., a vertical or horizontal line in 2D). This recursively divides the space into regions, like slicing a cake repeatedly along different planes.
 
 ### Key Differences from 1D
 
@@ -203,7 +203,7 @@ This yields the following tree:
                       /      \
             (2, 7)                 (17, 15)       ← level 1, split on y
            /     \                /       \
-      (3, 6)   (6, 12)       (10, 19)   (13, 15)  ← level 2, split on x
+      (3, 6)   (6, 12)       (13, 15)   (10, 19)  ← level 2, split on x
 
 ---
 
