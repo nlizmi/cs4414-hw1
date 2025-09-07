@@ -419,7 +419,7 @@ The passages are stored in:
 
 To test your program with this dataset, run:
 ```
-./knn 1 ./data/queries_emd.json ./data/passages_emd.json 2
+./knn 384 ./data/queries_emd.json ./data/passages_emd.json 2
 ```
 
 This command runs KNN search in 384D to find the 2 nearest neighbors to the query point.
@@ -446,9 +446,9 @@ To run the program:
 ./main <query_json> <passage_json> <K>
 ```
 
-- `<mode>`:  
-  - Use `0` for scalar input (`float`)  
-  - Use any other value for vector input (`std::array<float, N>`)
+- `<dim>`:  
+  - The dimensionality of the embedding.
+  - The embeddings generated using the described process have dim = 384. However, you may also create toy embeddings with smaller dimensions for debugging purposes.
 
 - `<query_json>`: Path to the JSON file containing the query point.
 
@@ -463,12 +463,12 @@ The `Embedding_T<T>` structure uses C++ template specialization to allow the K-D
 
 - For `float`: 
   - Represents a scalar (1-dimensional) embedding.
-  - `Dim = 1`.
+  - The `Dim` function always return 1.
   - The `distance` function computes the absolute difference: `|a - b|`.
 
-- For `std::array<float, N>`:
+- For `std::vector<float>`:
   - Represents a fixed-size N-dimensional vector embedding.
-  - `Dim = N`.
+  - The `Dim` function returns N, which corresponds to the dim value of the argument you provided.
   - The `distance` function computes the Euclidean distance between two vectors.
 
 ### `Node<T>`
