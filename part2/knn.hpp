@@ -30,7 +30,7 @@ inline size_t& runtime_dim() {
 }
 
 // variable-size vector: N-D
-// template <size_t N>
+template <>
 struct Embedding_T<std::vector<float>>
 {
     static size_t Dim() { return runtime_dim(); }
