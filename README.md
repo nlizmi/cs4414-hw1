@@ -15,7 +15,7 @@ The assignment is broken down into three main parts with three different deadlin
 
 | Task                                         | Points | Due Date             |
 |----------------------------------------------|--------|----------------------|
-| 1. Work with 1D Data                         | 60     | September 15, 2025   |
+| 1. Work with 1D Data                         | 40     | September 15, 2025   |
 | 2. Work with k-d Data                        | 20     | September 22, 2025   |
 | 3. ANN Search Using the ALGLIB Library       | 30     | September 29, 2025   |
 
@@ -163,7 +163,7 @@ A k-d tree organizes $k$-dimensional points using recursive partitioning. At eac
 
 ## Build k-d Tree
 
-A **k-d tree** (short for *k*-dimensional tree) is a generalization of a binary search tree that organizes points in $d$-dimensional space. Like the 1D case, the idea is to recursively partition the space, but instead of splitting the number line, each node splits the space with a **hyperplane** (e.g., a vertical or horizontal line in 2D). This recursively divides the space into regions, like slicing a cake repeatedly along different planes.
+A **k-d tree** (short for *k*-dimensional tree) is a generalization of a binary search tree that organizes points in $k$-dimensional space. Like the 1D case, the idea is to recursively partition the space, but instead of splitting the number line, each node splits the space with a **hyperplane** (e.g., a vertical or horizontal line in 2D). This recursively divides the space into regions, like slicing a cake repeatedly along different planes.
 
 ### Key Differences from 1D
 
@@ -203,7 +203,7 @@ This yields the following tree:
                       /      \
             (2, 7)                 (17, 15)       ← level 1, split on y
            /     \                /       \
-      (3, 6)   (6, 12)       (10, 19)   (13, 15)  ← level 2, split on x
+      (3, 6)   (6, 12)       (13, 15)   (10, 19)  ← level 2, split on x
 
 ---
 
@@ -419,7 +419,7 @@ The passages are stored in:
 
 To test your program with this dataset, run:
 ```
-./knn 1 ./data/queries_emd.json ./data/passages_emd.json 2
+./knn 384 ./data/queries_emd.json ./data/passages_emd.json 2
 ```
 
 This command runs KNN search in 384D to find the 2 nearest neighbors to the query point.
@@ -446,9 +446,9 @@ To run the program:
 ./main <query_json> <passage_json> <K>
 ```
 
-- `<mode>`:  
-  - Use `0` for scalar input (`float`)  
-  - Use any other value for vector input (`std::array<float, N>`)
+- `<dim>`:  
+  - The dimensionality of the embedding.
+  - The embeddings generated using the described process have dim = 384. However, you may also create toy embeddings with smaller dimensions for debugging purposes.
 
 - `<query_json>`: Path to the JSON file containing the query point.
 
@@ -463,12 +463,12 @@ The `Embedding_T<T>` structure uses C++ template specialization to allow the K-D
 
 - For `float`: 
   - Represents a scalar (1-dimensional) embedding.
-  - `Dim = 1`.
+  - The `Dim` function always return 1.
   - The `distance` function computes the absolute difference: `|a - b|`.
 
-- For `std::array<float, N>`:
+- For `std::vector<float>`:
   - Represents a fixed-size N-dimensional vector embedding.
-  - `Dim = N`.
+  - The `Dim` function returns N, which corresponds to the dim value of the argument you provided.
   - The `distance` function computes the Euclidean distance between two vectors.
 
 ### `Node<T>`
