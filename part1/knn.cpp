@@ -25,7 +25,28 @@ Node* buildKD(std::vector<std::pair<Embedding_T,int>>& items, int depth) {
     You should recursively construct the tree and return the root node.
     For now, this is a stub that returns nullptr.
     */
-    return nullptr;
+    if (items.size() == 0) {
+        return nullptr;
+    }
+
+    int k = 1; // change later
+    int axis = depth % k;
+
+    std::sort(items.begin(), items.end(), [](const auto& a, const auto& b) {
+        int dim = axis;
+        while (a.get(dim) == b.get(dim)) { dim = (dim + 1) % k; }
+        return a.get(dim) < b.get(dim);
+    });
+
+    const size_t median_idx = (items.size() - 1) / 2;
+    const std::pair<Embedding_T, int>& median = items[median_idx];
+
+    Node* root = new Node();
+    root->embedding = median.first;
+    root->idx = median_idx;
+    root->left = buildKD(std::vector(items.begin(), items.begin() + median_idx), depth + 1);
+    root->right = buildKD(std::vector(items.begin() + median_idx + 1, items.end()), depth + 1);
+    return root;
 }
 
 
