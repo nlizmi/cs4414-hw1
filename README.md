@@ -405,6 +405,13 @@ We use the MS MARCO passage ranking dataset (Li et al., arXiv:1611.09268), a ben
 
 We’ve processed 9650 queries and 79,176 passages from the dataset by embedding each one using the BGE encoder. 
 
+To download the data:
+
+```
+chmod +x download.sh
+./download.sh
+```
+
 The queries are stored in (the first one is served as the query point in the program):
 
 ```
