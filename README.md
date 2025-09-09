@@ -450,7 +450,7 @@ make all
 To run the program:
 
 ```bash
-./main <query_json> <passage_json> <K>
+./main <dim> <query_json> <passage_json> <K>
 ```
 
 - `<dim>`:  
