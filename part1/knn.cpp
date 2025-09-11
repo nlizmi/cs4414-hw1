@@ -60,9 +60,6 @@ void knnSearch(Node *node,
                int K,
                MaxHeap &heap)
 {
-    // int k = 1; // change later
-    // int axis = depth % k;
-
     if (K == 0 || node == nullptr) return;
 
     float distance =  Node::queryEmbedding - node->embedding;
@@ -71,7 +68,7 @@ void knnSearch(Node *node,
     knnSearch(near_subtree, depth + 1, K, heap);
 
     float abs_distance = std::abs(distance);
-    if (heap.size() <= K)
+    if (heap.size() < K)
     {
         heap.emplace(abs_distance, node->idx);
     }
