@@ -71,11 +71,23 @@ void knnSearch(Node *node,
     knnSearch(near_subtree, depth + 1, K, heap);
 
     float abs_distance = std::abs(distance);
-    float furthest = heap.top().first;
-    if (abs_distance < furthest)
+    if (heap.size() <= K)
     {
-        if (heap.size() >= K) heap.pop();
         heap.emplace(abs_distance, node->idx);
+    }
+    else
+    {
+        float furthest = heap.top().first;
+        if (abs_distance < furthest)
+        {
+            heap.pop();
+            heap.emplace(abs_distance, node->idx);
+        }
+    }
+
+    float new_furthest = heap.top().first;
+    if (abs_distance < new_furthest)
+    {
         knnSearch(far_subtree, depth + 1, K, heap);
     }
 }
