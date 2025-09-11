@@ -83,7 +83,7 @@ void knnSearch(Node *node,
     }
 
     float new_furthest = heap.top().first;
-    if (abs_distance < new_furthest)
+    if (heap.size() < K || abs_distance < new_furthest)
     {
         knnSearch(far_subtree, depth + 1, K, heap);
     }
