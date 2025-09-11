@@ -19,7 +19,7 @@ constexpr float getCoordinate(Embedding_T e, size_t axis)
 }
 
 // Build a balanced KD‐tree by splitting on median at each level.
-Node* buildKD(std::vector<std::pair<Embedding_T,int>>& items, int depth) {
+Node* buildKD(std::vector<std::pair<Embedding_T, int>>& items, int depth) {
     /*
     TODO: Implement this function to build a balanced KD-tree.
     You should recursively construct the tree and return the root node.
@@ -29,14 +29,8 @@ Node* buildKD(std::vector<std::pair<Embedding_T,int>>& items, int depth) {
         return nullptr;
     }
 
-    // int k = 1; // change later
-    // int axis = depth % k;
-
-    std::sort(items.begin(), items.end(), [/*&*/](const auto& a, const auto& b) {
-        return a.first < b.first; // change later
-        // int dim = axis;
-        // while (a.get(dim) == b.get(dim)) { dim = (dim + 1) % k; }
-        // return a.get(dim) < b.get(dim);
+    std::sort(items.begin(), items.end(), [](const auto& a, const auto& b) {
+        return a.first < b.first;
     });
 
     const size_t median_idx = (items.size() - 1) / 2;
@@ -44,7 +38,7 @@ Node* buildKD(std::vector<std::pair<Embedding_T,int>>& items, int depth) {
 
     Node* root = new Node();
     root->embedding = median.first;
-    root->idx = median_idx;
+    root->idx = median.second;
     std::vector left_items(items.begin(), items.begin() + median_idx);
     std::vector right_items(items.begin() + median_idx + 1, items.end());
     root->left = buildKD(left_items, depth + 1);
@@ -66,10 +60,22 @@ void knnSearch(Node *node,
                int K,
                MaxHeap &heap)
 {
-    /*
-    TODO: Implement this function to perform k-nearest neighbors (k-NN) search on the KD-tree.
-    You should recursively traverse the tree and maintain a max-heap of the K closest points found so far.
-    For now, this is a stub that does nothing.
-    */
-    return;
+    // int k = 1; // change later
+    // int axis = depth % k;
+
+    if (K == 0 || node == nullptr) return;
+
+    float distance =  Node::queryEmbedding - node->embedding;
+    Node *near_subtree = distance < 0 ? node->left : node->right;
+    Node *far_subtree = distance < 0 ? node->right : node->left;
+    knnSearch(near_subtree, depth + 1, K, heap);
+
+    float abs_distance = std::abs(distance);
+    float furthest = heap.top().first;
+    if (abs_distance < furthest)
+    {
+        if (heap.size() >= K) heap.pop();
+        heap.emplace(abs_distance, node->idx);
+        knnSearch(far_subtree, depth + 1, K, heap);
+    }
 }
