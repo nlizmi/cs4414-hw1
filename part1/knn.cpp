@@ -29,13 +29,14 @@ Node* buildKD(std::vector<std::pair<Embedding_T,int>>& items, int depth) {
         return nullptr;
     }
 
-    int k = 1; // change later
-    int axis = depth % k;
+    // int k = 1; // change later
+    // int axis = depth % k;
 
-    std::sort(items.begin(), items.end(), [](const auto& a, const auto& b) {
-        int dim = axis;
-        while (a.get(dim) == b.get(dim)) { dim = (dim + 1) % k; }
-        return a.get(dim) < b.get(dim);
+    std::sort(items.begin(), items.end(), [/*&*/](const auto& a, const auto& b) {
+        return a.first < b.first; // change later
+        // int dim = axis;
+        // while (a.get(dim) == b.get(dim)) { dim = (dim + 1) % k; }
+        // return a.get(dim) < b.get(dim);
     });
 
     const size_t median_idx = (items.size() - 1) / 2;
@@ -44,8 +45,10 @@ Node* buildKD(std::vector<std::pair<Embedding_T,int>>& items, int depth) {
     Node* root = new Node();
     root->embedding = median.first;
     root->idx = median_idx;
-    root->left = buildKD(std::vector(items.begin(), items.begin() + median_idx), depth + 1);
-    root->right = buildKD(std::vector(items.begin() + median_idx + 1, items.end()), depth + 1);
+    std::vector left_items(items.begin(), items.begin() + median_idx);
+    std::vector right_items(items.begin() + median_idx + 1, items.end());
+    root->left = buildKD(left_items, depth + 1);
+    root->right = buildKD(right_items, depth + 1);
     return root;
 }
 
