@@ -98,7 +98,34 @@ Node<T>* buildKD(std::vector<std::pair<T,int>>& items, int depth = 0)
     You should recursively construct the tree and return the root node.
     For now, this is a stub that returns nullptr.
     */
-    return nullptr;
+    if (items.size() == 0) {
+        return nullptr;
+    }
+
+    int splitting_axis = depth % Embedding_T<T>::Dim();
+
+    std::sort(items.begin(), items.end(), [&](const std::pair<T, int>& a, const std::pair<T, int>& b)
+    {
+        int temp_axis = splitting_axis;
+        float diff;
+        while ((diff = getCoordinate(a.first, temp_axis) - getCoordinate(b.first, temp_axis)) == 0)
+        {
+            temp_axis = (temp_axis + 1) % Embedding_T<T>::Dim();
+        }
+        return diff < 0;
+    });
+
+    const size_t median_idx = (items.size() - 1) / 2;
+    const std::pair<T, int>& median = items[median_idx];
+
+    Node<T> *root = new Node<T>();
+    root->embedding = median.first;
+    root->idx = median.second;
+    std::vector left_items(items.begin(), items.begin() + median_idx);
+    std::vector right_items(items.begin() + median_idx + 1, items.end());
+    root->left = buildKD(left_items, depth + 1);
+    root->right = buildKD(right_items, depth + 1);
+    return root;
 }
 
 template <typename T>
@@ -156,5 +183,33 @@ void knnSearch(Node<T> *node,
     You should recursively traverse the tree and maintain a max-heap of the K closest points found so far.
     For now, this is a stub that does nothing.
     */
-    return;
+    if (K == 0 || node == nullptr) return;
+
+    int splitting_axis = depth % Embedding_T<T>::Dim();
+
+    float diff = getCoordinate(Node<T>::queryEmbedding, splitting_axis) - getCoordinate(node->embedding, splitting_axis);
+    Node<T> *near_subtree = diff < 0 ? node->left : node->right;
+    Node<T> *far_subtree = diff < 0 ? node->right : node->left;
+    knnSearch(near_subtree, depth + 1, K, heap);
+
+    float distance = Embedding_T<T>::distance(Node<T>::queryEmbedding, node->embedding);
+    if (heap.size() < static_cast<size_t>(K))
+    {
+        heap.emplace(distance, node->idx);
+    }
+    else
+    {
+        float furthest = heap.top().first;
+        if (distance < furthest)
+        {
+            heap.pop();
+            heap.emplace(distance, node->idx);
+        }
+    }
+
+    float new_furthest = heap.top().first;
+    if (heap.size() < static_cast<size_t>(K) || distance < new_furthest)
+    {
+        knnSearch(far_subtree, depth + 1, K, heap);
+    }
 }
