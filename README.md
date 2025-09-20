@@ -426,10 +426,12 @@ An example of one of the passage files is stored in:
 
 To test your program with this dataset, run:
 ```
-./knn 384 ./data/queries_emd.json ./data/passages1.json 2
+./main 384 ./data/queries_emd.json ./data/passages1.json 2
 ```
 
 This command runs KNN search in 384D to find the 2 nearest neighbors to the query point.
+
+We have also uploaded several simple test cases (e.g., `3d-1.json`) in `part2/data` that you can use for debugging.
 
 
 
@@ -503,7 +505,7 @@ You will reuse the same core logic from Part 1 (building the tree, and running K
 ### Grading
 You will be tested on four different values of k: 1, 3, 5, and 10.  There are four test cases each in k = 1, 3, and 5. The last test case of these are based on the MS MARCO passage datasets; the other datasets are located in the `./data/` directory. There are two test cases in k = 10, both based on the MS MARCO passage datasets.
 
-We will run your program to verify the correctness of the built tree and the output of the search. Each value of `k` total to be worth 5 points:
+We will run your program to verify the correctness of the built tree and the output of the search. Each value of `k` total to be worth 5 points. The `buildKD` on the MS MARCO dataset 1 and 2 across all `k` are combined into the `buildKD, MS MARCO 1` and `buildKD, MS MARCO 2` tests.
 
 - Correct outputs for k=1 → 5 points
    - 1.25 points each test case (4 test cases)
