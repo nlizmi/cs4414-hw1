@@ -190,10 +190,9 @@ void knnSearch(Node<T> *node,
     float diff = getCoordinate(Node<T>::queryEmbedding, splitting_axis) - getCoordinate(node->embedding, splitting_axis);
     Node<T> *near_subtree = diff < 0 ? node->left : node->right;
     Node<T> *far_subtree = diff < 0 ? node->right : node->left;
-    knnSearch(near_subtree, depth + 1, K, heap);
 
     float distance = Embedding_T<T>::distance(Node<T>::queryEmbedding, node->embedding);
-    if (heap.size() < static_cast<size_t>(K))
+    if (static_cast<int>(heap.size()) < K)
     {
         heap.emplace(distance, node->idx);
     }
@@ -207,8 +206,10 @@ void knnSearch(Node<T> *node,
         }
     }
 
+    knnSearch(near_subtree, depth + 1, K, heap);
+
     float new_furthest = heap.top().first;
-    if (heap.size() < static_cast<size_t>(K) || distance < new_furthest)
+    if (static_cast<int>(heap.size()) < K || std::abs(diff) < new_furthest)
     {
         knnSearch(far_subtree, depth + 1, K, heap);
     }
