@@ -692,7 +692,7 @@ make all
 To run the program:
 
 ```bash
-./knn_alglib <query_json> <passage_json> <K> <eps>
+./main <query_json> <passage_json> <K> <eps>
 ```
 
 - `<query_json>`: Path to the JSON file containing the query point.
@@ -705,11 +705,12 @@ To run the program:
 
 
 You can reuse the data files from Part 2 as your query or passage inputs. For example:
+```
+cp -r ../part2/data ./data/
+./main ./data/3d-1.json ./data/3d-2.json 1 0
+./main ./data/queries_emb.json ./data/passages1.json 1 0
+```
 
-```
-./main ../part2/data/3d-1.json ../part2/data/3d-2.json 1 0
-./main ../part2/data/queries_emb.json ../part2/data/passages1.json 1 0
-```
 
 
 
@@ -718,7 +719,7 @@ You can reuse the data files from Part 2 as your query or passage inputs. For ex
 
 ### A. Implement ANN search using ALGLIB
 
-You need to complete the knn_alglib.cpp file by:
+You need to complete the main.cpp file by:
 
 1. Loading and Parsing the Input
 
@@ -752,7 +753,7 @@ Your should answer the following question in the report:
   - You should compare the performance of:
     - Your own k-d tree KNN implementation from Part 2
     - The ALGLIB-based implementation from Part 3
-  - Run both implementations in exact mode (i.e., set <epsilon> = 0) and search for the 10 nearest neighbors (K = 10).
+  - Run both implementations in exact mode (i.e., set `epsilon` = 0) and search for the 10 nearest neighbors (K = 10).
   - For each method, report the following timing breakdown:
     - Total elapsed time
     - Time to process and parse the input
