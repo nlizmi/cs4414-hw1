@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "alglibmisc.h"
 #include <nlohmann/json.hpp>
 #include <chrono>
@@ -109,15 +110,23 @@ int main(int argc, char* argv[]) {
         for (alglib::ae_int_t i = 0; i < num_neighbors_found; ++i) {
             std::cout << "Neighbor " << i+1 << ": distance = " << found_dists[i] << "; id = " << found_ids[i] << std::endl;
         }
+
+        auto program_end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Total: " << std::chrono::duration<double, std::milli>(program_end - program_start).count() << std::endl;
+        std::cout << "Process and parse: " << std::chrono::duration<double, std::milli>(processing_end - processing_start).count() << std::endl;
+        std::cout << "Tree build: " << std::chrono::duration<double, std::milli>(tree_end - tree_start).count() << std::endl;
+        std::cout << "KNN: " << std::chrono::duration<double, std::milli>(knn_end - knn_start).count() << std::endl;
+
+        for (alglib::ae_int_t i = 0; i < num_neighbors_found; ++i) {
+            std::cout << found_ids[i] << ",";
+        }
+        std::cout << std::endl;
     }
     catch(alglib::ap_error &e) {
         std::cerr << "ALGLIB error: " << e.msg << std::endl;
         return 1;
     }
-
-    auto program_end = std::chrono::high_resolution_clock::now();
-
-    std::cout << program_end - program_start << std::endl;
 
     return 0;
 }

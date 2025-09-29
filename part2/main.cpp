@@ -147,6 +147,11 @@ int runMain(char **argv)
     std::cout << "Processing time: " << processing_duration.count() << " ms\n";
     std::cout << "KD-tree build time: " << buildtree_duration.count() << " ms\n";
     std::cout << "K-NN query time: " << query_duration.count() << " ms\n";
+    
+    for (size_t i = 0; i < out.size(); ++i) {
+        std::cout << out[i].second << ",";
+    }
+    std::cout << std::endl;
 
     freeTree(root);
     return 0;

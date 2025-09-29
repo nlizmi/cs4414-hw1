@@ -102,15 +102,16 @@ Node<T>* buildKD(std::vector<std::pair<T,int>>& items, int depth = 0)
         return nullptr;
     }
 
-    int splitting_axis = depth % Embedding_T<T>::Dim();
+    size_t splitting_axis = depth % Embedding_T<T>::Dim();
 
     std::sort(items.begin(), items.end(), [&](const std::pair<T, int>& a, const std::pair<T, int>& b)
     {
-        int temp_axis = splitting_axis;
+        size_t temp_axis = splitting_axis;
         float diff;
         while ((diff = getCoordinate(a.first, temp_axis) - getCoordinate(b.first, temp_axis)) == 0)
         {
             temp_axis = (temp_axis + 1) % Embedding_T<T>::Dim();
+            if (temp_axis == splitting_axis) break;
         }
         return diff < 0;
     });
